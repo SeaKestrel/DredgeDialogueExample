@@ -67,22 +67,11 @@ namespace DredgeDialogueAPI
             if (PopulateObjectFromMeta(speaker, meta))
             {
                 SpeakerData data = null;
-                if (speaker._gender == AdvancedSpeakerData.Gender.FEMALE)
-                {
 
-                    (GameManager.Instance.DialogueRunner.dialogueViews[0] as DredgeDialogueView).speakerDataLookup.lookupTable.TryGetValue("TRAVELLING_MERCHANT_NAME_KEY", out data);
-                    if (data != null)
-                    {
-                        speaker.paralinguistics = data.paralinguistics;
-                    }
-                }
-                else if (speaker._gender == AdvancedSpeakerData.Gender.MALE)
+                (GameManager.Instance.DialogueRunner.dialogueViews[0] as DredgeDialogueView).speakerDataLookup.lookupTable.TryGetValue(speaker.paralinguisticsNameKey, out data);
+                if (data != null)
                 {
-                    (GameManager.Instance.DialogueRunner.dialogueViews[0] as DredgeDialogueView).speakerDataLookup.lookupTable.TryGetValue("MAYOR_NAME_KEY", out data);
-                    if (data != null)
-                    {
-                        speaker.paralinguistics = data.paralinguistics;
-                    }
+                    speaker.paralinguistics = data.paralinguistics;
                 }
                 (GameManager.Instance.DialogueRunner.dialogueViews[0] as DredgeDialogueView).speakerDataLookup.lookupTable.Add(speaker.speakerNameKey, speaker);
             }
@@ -112,7 +101,7 @@ namespace DredgeDialogueAPI
             {
                 { "id", new(null, o=> o.ToString()) },
                 { "speakerNameKey", new(null, o=> o.ToString()) },
-                { "gender", new(AdvancedSpeakerData.Gender.MALE, o=> DredgeTypeHelpers.GetEnumValue<AdvancedSpeakerData.Gender>(int.Parse(o.ToString()))) },
+                { "paralinguisticsNameKey", new(null, o=> o.ToString()) },
                 { "yarnRootNode", new(null, o=> o.ToString()) },
                 { "smallPortraitSprite", new(null, o=> TextureUtil.GetSprite(o.ToString())) },
                 { "portraitPrefab", new(null, o=> GameObject.Find(o.ToString())) },
@@ -138,13 +127,7 @@ namespace DredgeDialogueAPI
 
         internal class AdvancedSpeakerData : SpeakerData
         {
-            public enum Gender
-            {
-                MALE = 0,
-                FEMALE = 1
-            }
-
-            public Gender _gender;
+            public string paralinguisticsNameKey;
         }
     }
 }
